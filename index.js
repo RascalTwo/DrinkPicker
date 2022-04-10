@@ -1,7 +1,9 @@
 const drinkOptionsContainer = document.querySelector('#drink-options');
 const drinkContainer = document.querySelector('#drink');
 
-document.querySelector('#search-by-name').addEventListener('submit', (event) => {
+const form = document.querySelector('#search-by-name')
+
+form.addEventListener('submit', (event) => {
     event.preventDefault();
     const query = event.target.elements[0].value.trim();
     const url = new URL('https://www.thecocktaildb.com/api/json/v1/1/search.php');
@@ -15,6 +17,34 @@ document.querySelector('#search-by-name').addEventListener('submit', (event) => 
             displayDrinkOptions(drinks);
         });
 });
+
+
+(() => {
+    const datalist = form.querySelector('datalist');
+    let timeout = null;
+    form.querySelector('input').addEventListener('input', ({ target: { value } }) => {
+        clearTimeout(timeout)
+        timeout = setTimeout(() => {
+            const url = new URL('https://www.thecocktaildb.com/api/json/v1/1/search.php');
+            url.searchParams.set('s', value);
+            fetch(url)
+                .then(response => response.json())
+                .then(({ drinks }) => {
+                    console.log(drinks);
+                    const options = drinks.map(({ strDrink }) => {
+                        const option = document.createElement('option');
+                        option.textContent = strDrink;
+                        return option
+                    }).reduce((fragment, option) => {
+                        fragment.appendChild(option)
+                        return fragment
+                    }, document.createDocumentFragment());
+                    datalist.innerHTML = '';
+                    datalist.appendChild(options);
+                });
+        }, 500)
+    });
+})();
 
 (() => {
     const idDrink = new URLSearchParams(window.location.hash.slice(1)).get('idDrink')
