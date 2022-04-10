@@ -3,7 +3,6 @@ html, body {
 	font-size: 62.5%;
 	background: #230312;
 	color: white;
-	height: 100vh;
 }
 
 * {
@@ -25,12 +24,11 @@ main {
 }
 
 form {
-	padding-bottom: 3rem;
+	padding: 3rem 0;
 }
 
 #drink img {
-  max-width: 33vw;
-	margin: auto;
+  max-width: 33vmax;
 }
 
 #drink {
@@ -41,14 +39,18 @@ form {
 	display: flex;
 	gap: 1rem;
 	padding: 1rem;
+	align-items: start;
+}
+
+@media (max-width: 1000px) {
+	#drink #info {
+		flex-direction: column;
+		align-items: center;
+	}
 }
 
 #drink #info > * {
 	flex: 1;
-}
-
-#drink table {
-	margin: auto;
 }
 
 #drink table td:last-of-type {
@@ -67,6 +69,7 @@ table, th, td {
 	width: 300px;
 	margin: auto;
 	scroll-behavior: smooth;
+	padding-top: 20rem;
 }
 
 #drink-options > * {
