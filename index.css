@@ -1,8 +1,9 @@
-html {
+html, body {
 	box-sizing: border-box;
 	font-size: 62.5%;
 	background: #230312;
 	color: white;
+	height: 100vh;
 }
 
 * {
@@ -18,6 +19,13 @@ main {
 	text-align: center;
 	width: 80%;
 	margin: auto;
+	height: 100%;
+	display: flex;
+  flex-direction: column;
+}
+
+form {
+	padding-bottom: 3rem;
 }
 
 #drink img {
@@ -55,13 +63,16 @@ table, th, td {
 
 #drink-options {
 	display: flex;
-	flex-wrap: wrap;
-	gap: 5rem;
+	overflow-x: scroll;
+	width: 300px;
+	margin: auto;
+	scroll-behavior: smooth;
 }
 
 #drink-options > * {
 	flex: 1;
-	max-width: 25vmax;
+	max-width: 300px;
+	padding: 1rem 5rem;
 }
 
 

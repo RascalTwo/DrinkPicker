@@ -29,6 +29,30 @@ document.querySelector('#search-by-name').addEventListener('submit', (event) => 
         });
 })();
 
+(() => {
+    let animating = true;
+    let index = 0;
+    let direction = 1;
+    setInterval(() => {
+        if (!animating) return;
+
+        if (!drinkOptionsContainer.children.length) return;
+        if (drinkOptionsContainer.contains(document.activeElement)) return;
+
+        drinkOptionsContainer.children[index].scrollIntoView();
+        index += direction;
+        if (drinkOptionsContainer.children[index]) return;
+
+        direction = -direction;
+        index += direction;
+    }, 2500);
+
+    drinkOptionsContainer.addEventListener('mouseenter', () => animating = false);
+    drinkOptionsContainer.addEventListener('mousedown', () => animating = false);
+
+    drinkOptionsContainer.addEventListener('mouseleave', () => animating = true);
+})();
+
 function displayDrinkOptions(drinks) {
     drinkContainer.classList.add('hidden');
 
