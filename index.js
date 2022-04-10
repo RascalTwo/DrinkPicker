@@ -22,7 +22,28 @@ form.addEventListener('submit', (event) => {
 (() => {
     const datalist = form.querySelector('datalist');
     let timeout = null;
-    form.querySelector('input').addEventListener('input', ({ target: { value } }) => {
+
+    const input = form.querySelector('input')
+
+    input.addEventListener('keydown', ({ key }) => {
+        // If keyboared was from typing return, otherwise was from choice of autocomplete suggestion
+        if (key) return;
+
+        setTimeout(() => {
+            const url = new URL('https://www.thecocktaildb.com/api/json/v1/1/search.php');
+            url.searchParams.set('s', input.value);
+            window.location.hash = '';
+            fetch(url)
+                .then(response => response.json())
+                .then(({ drinks }) => {
+                    if (!drinks) throw new Error('No Drinks Found')
+                    if (drinks.length === 1) displayDrink(drinks[0]);
+                    displayDrinkOptions(drinks);
+                }).catch(error => alert(error.message));
+        }, 100)
+    });
+
+    input.addEventListener('input', ({ target: { value } }) => {
         clearTimeout(timeout);
         if (!value) return;
 
