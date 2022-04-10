@@ -50,26 +50,13 @@ form.addEventListener('submit', (event) => {
 })();
 
 (() => {
-    const idDrink = new URLSearchParams(window.location.hash.slice(1)).get('idDrink')
-    if (!idDrink) return;
-    const url = new URL('https://www.thecocktaildb.com/api/json/v1/1/lookup.php');
-    url.searchParams.set('i', idDrink);
-    fetch(url)
-        .then(response => response.json())
-        .then(({ drinks }) => {
-            if (!drinks) return alert('Invalid Drink ID');
-            displayDrink(drinks[0]);
-        });
-})();
-
-(() => {
     let animating = true;
     let index = 0;
     let direction = 1;
     setInterval(() => {
         if (!animating) return;
 
-        if (!drinkOptionsContainer.children.length) return;
+        if (!drinkOptionsContainer.childElementCount) return;
         if (drinkOptionsContainer.contains(document.activeElement)) return;
 
         drinkOptionsContainer.children[index].scrollIntoView();
@@ -146,3 +133,23 @@ function displayDrink(drink) {
 
     drinkContainer.classList.remove('hidden');
 }
+
+
+function handleHashChange(){
+    const idDrink = new URLSearchParams(window.location.hash.slice(1)).get('idDrink')
+    if (!idDrink) {
+        drinkContainer.classList.add('hidden');
+        drinkOptionsContainer.classList.toggle('hidden', !drinkOptionsContainer.childElementCount);
+        return;
+    }
+    const url = new URL('https://www.thecocktaildb.com/api/json/v1/1/lookup.php');
+    url.searchParams.set('i', idDrink);
+    fetch(url)
+        .then(response => response.json())
+        .then(({ drinks }) => {
+            if (!drinks) throw new Error('Invalid Drink ID');
+            displayDrink(drinks[0]);
+        }).catch(error => alert(error.message));
+}
+window.addEventListener('hashchange', handleHashChange);
+handleHashChange();
