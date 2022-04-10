@@ -72,6 +72,16 @@ table, th, td {
 	padding-top: 20rem;
 }
 
+*::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+  background-color: #aaa;
+}
+
+*::-webkit-scrollbar-thumb {
+  background: rgb(75, 75, 75);
+}
+
 #drink-options > * {
 	flex: 1;
 	max-width: 300px;
