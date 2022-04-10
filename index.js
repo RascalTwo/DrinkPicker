@@ -12,10 +12,10 @@ form.addEventListener('submit', (event) => {
     fetch(url)
         .then(response => response.json())
         .then(({ drinks }) => {
-            if (!drinks) return alert('No Drinks Found');
+            if (!drinks) throw new Error('No Drinks Found')
             if (drinks.length === 1) displayDrink(drinks[0]);
             displayDrinkOptions(drinks);
-        });
+        }).catch(error => alert(error.message));
 });
 
 
@@ -23,17 +23,20 @@ form.addEventListener('submit', (event) => {
     const datalist = form.querySelector('datalist');
     let timeout = null;
     form.querySelector('input').addEventListener('input', ({ target: { value } }) => {
-        clearTimeout(timeout)
+        clearTimeout(timeout);
+        if (!value) return;
+
         timeout = setTimeout(() => {
             const url = new URL('https://www.thecocktaildb.com/api/json/v1/1/search.php');
             url.searchParams.set('s', value);
             fetch(url)
                 .then(response => response.json())
                 .then(({ drinks }) => {
-                    console.log(drinks);
+                    if (!drinks) return;
+
                     const options = drinks.map(({ strDrink }) => {
                         const option = document.createElement('option');
-                        option.textContent = strDrink;
+                        option.value = strDrink;
                         return option
                     }).reduce((fragment, option) => {
                         fragment.appendChild(option)
